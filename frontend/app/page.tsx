@@ -1,22 +1,30 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
 export default function Root() {
   const router = useRouter()
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    supabase.auth
-      .getSession()
-      .then(({ data }) => {
-        router.replace(data.session ? '/home' : '/login')
-      })
-      .finally(() => setLoading(false))
+    // First, check if there's already a session
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) {
+        router.replace('/home')
+      }
+    })
+
+    // Then listen for auth state changes (handles the post-login case)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        router.replace('/home')
+      } else if (event === 'SIGNED_OUT' || event === 'INITIAL_SESSION') {
+        router.replace('/login')
+      }
+    })
+
+    return () => subscription.unsubscribe()
   }, [router])
 
-  if (loading) return <div>Loading...</div>
-
-  return null
+  return <div>Loading...</div>
 }

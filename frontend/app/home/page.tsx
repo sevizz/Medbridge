@@ -1,4 +1,5 @@
 'use client'
+import { supabase } from '../../lib/supabase'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import PhoneShell from '@/components/PhoneShell'
@@ -10,11 +11,21 @@ export default function HomePage() {
   const router = useRouter()
   const [profile, setProfile] = useState<any>(null)
   const [nextMed, setNextMed] = useState<any>(null)
+  const [loading, setLoading] = useState(true)   // ← ADD THIS
 
   useEffect(() => {
-    getProfile().then(p => { if (!p) { router.push('/login'); return } setProfile(p) }).catch(() => router.push('/login'))
-    getReminders().then(r => setNextMed(r.find((x:any)=>!x.is_done)||null)).catch(()=>{})
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        getProfile().then(p => setProfile(p)).finally(() => setLoading(false))
+      } else if (event === 'INITIAL_SESSION' && !session) {
+        router.push('/login')
+      }
+    })
+    return () => subscription.unsubscribe()
   }, [router])
+
+  // ← ADD THIS: don't render (or redirect) until auth check is done
+  if (loading) return null
 
   return (
     <PhoneShell>
@@ -43,17 +54,18 @@ export default function HomePage() {
             </div>
 
             {[
-              {icon:'📋',title:'Discharge Explainer',desc:'Upload your discharge summary and get a plain-language explanation in your language.',bg:'rgba(192,57,43,0.1)',path:'/discharge'},
-              {icon:'💊',title:'Drug Info Lookup',desc:'Tap any drug on your prescription to learn what it does and how to take it safely.',bg:'rgba(26,107,90,0.1)',path:'/drugs'},
-              {icon:'🩺',title:'Symptom Checker',desc:'Feeling something unusual? Describe it and find out whether to wait or act fast.',bg:'rgba(125,60,152,0.1)',path:'/symptom'},
-            ].map(c => (
-              <div key={c.path} onClick={()=>router.push(c.path)} style={{background:'white',borderRadius:'16px',padding:'18px',boxShadow:'0 2px 12px rgba(14,17,23,0.08)',cursor:'pointer',border:'1px solid var(--border)'}}>
-                <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-                  <div style={{width:'40px',height:'40px',borderRadius:'10px',background:c.bg,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.1rem'}}>{c.icon}</div>
-                  <span style={{color:'var(--muted)',fontSize:'0.8rem'}}>→</span>
+              {icon:'📋',title:'Discharge Explainer',desc:'Upload your discharge summary and get a plain-language explanation in your language.',path:'/discharge'},
+              {icon:'🩺',title:'Symptom Checker',desc:'Describe how you\'re feeling and get guidance on what to do next.',path:'/symptom'},
+              {icon:'💊',title:'Drug Info',desc:'Look up any medication for plain-language dosage and interaction info.',path:'/drugs'},
+            ].map(card => (
+              <div key={card.path} onClick={()=>router.push(card.path)} style={{background:'var(--paper)',borderRadius:'16px',padding:'16px',cursor:'pointer',border:'1px solid var(--border)'}}>
+                <div style={{display:'flex',alignItems:'flex-start',gap:'12px'}}>
+                  <span style={{fontSize:'1.4rem'}}>{card.icon}</span>
+                  <div>
+                    <div style={{fontSize:'0.85rem',fontWeight:600,marginBottom:'3px'}}>{card.title}</div>
+                    <div style={{fontSize:'0.72rem',color:'var(--muted)',lineHeight:1.4}}>{card.desc}</div>
+                  </div>
                 </div>
-                <div style={{fontFamily:'Playfair Display,serif',fontSize:'0.95rem',fontWeight:700,margin:'10px 0 4px',color:'var(--ink)'}}>{c.title}</div>
-                <div style={{fontSize:'0.75rem',color:'var(--muted)',lineHeight:1.5}}>{c.desc}</div>
               </div>
             ))}
           </div>

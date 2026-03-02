@@ -17,7 +17,10 @@ export default function LoginPage() {
     setErr('')
     if (!email || !pass) { setErr('Please enter your email and password.'); return }
     setLoading(true)
-    try { await signIn(email, pass); router.push('/home') }
+    try {
+      await signIn(email, pass)
+      router.replace('/home')   // ← use replace, not push
+    }
     catch (e: any) { setErr(e.message || 'Login failed. Please try again.') }
     finally { setLoading(false) }
   }
