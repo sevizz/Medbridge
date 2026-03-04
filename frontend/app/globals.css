@@ -117,25 +117,56 @@ textarea::placeholder {
   color: var(--text-muted);
 }
 
-/* ── Click / tap feedback ─────────────────────────── */
+/* ── Button hover feedback ─────────────────────────── */
 button {
-  transition: transform 0.12s ease, opacity 0.12s ease, filter 0.12s ease;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-button:hover {
+/* Tint overlay — shifts the button to a lighter shade on hover */
+button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0);
+  transition: background 0.18s ease;
+  pointer-events: none;
+}
+
+button:not(:disabled):hover {
   transform: translateY(-1px);
-  filter: brightness(1.08);
 }
 
-button:active {
+button:not(:disabled):hover::after {
+  background: rgba(255, 255, 255, 0.11);
+}
+
+button:not(:disabled):active {
   transform: scale(0.94) !important;
   opacity: 0.78;
-  filter: brightness(0.95);
+}
+
+button:not(:disabled):active::after {
+  background: rgba(0, 0, 0, 0.08);
 }
 
 /* For div-based clickable elements (cards, nav items) */
 .pressable {
+  position: relative;
+  overflow: hidden;
   transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.12s ease;
+}
+
+.pressable::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0);
+  transition: background 0.18s ease;
+  pointer-events: none;
 }
 
 .pressable:hover {
@@ -143,9 +174,17 @@ button:active {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
+.pressable:hover::after {
+  background: rgba(255, 255, 255, 0.07);
+}
+
 .pressable:active {
   transform: scale(0.96) !important;
   opacity: 0.75;
+}
+
+.pressable:active::after {
+  background: rgba(0, 0, 0, 0.07);
 }
 
 /* Keyframes */

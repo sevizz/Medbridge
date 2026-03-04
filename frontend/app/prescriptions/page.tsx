@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import BottomNav from '@/components/BottomNav'
 import ScreenHeader from '@/components/ScreenHeader'
-import { getPrescriptions } from '@/lib/api'
+import { getPrescriptions, deletePrescription } from '@/lib/api'
 import { supabase } from '@/lib/supabase'
 
 type Prescription = {
@@ -41,6 +41,7 @@ export default function PrescriptionsPage() {
   const [duration, setDuration] = useState('')
   const [notes, setNotes] = useState('')
   const [adding, setAdding] = useState(false)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
   function load() {
     setLoading(true)
@@ -51,6 +52,15 @@ export default function PrescriptionsPage() {
   }
 
   useEffect(() => { load() }, [])
+
+  async function handleDelete(id: string) {
+    setDeletingId(id)
+    try {
+      await deletePrescription(id)
+      setPrescriptions(prev => prev.filter(p => p.id !== id))
+    } catch { }
+    setDeletingId(null)
+  }
 
   async function handleAdd() {
     if (!drug.trim()) return
@@ -142,21 +152,38 @@ export default function PrescriptionsPage() {
                   padding: '14px 16px',
                   borderBottom: i < items.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
                   borderLeft: '3px solid #00C9A7',
-                  display: 'flex', flexDirection: 'column', gap: '4px',
+                  display: 'flex', alignItems: 'flex-start', gap: '10px',
+                  opacity: deletingId === p.id ? 0.4 : 1,
+                  transition: 'opacity 0.2s',
                 }}>
-                  <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>
-                    {p.drug_name}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    {p.dosage && <span>{p.dosage}</span>}
-                    {p.frequency && <span>· {p.frequency}</span>}
-                    {p.duration && <span>· {p.duration}</span>}
-                  </div>
-                  {p.notes && (
-                    <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', fontStyle: 'italic' }}>
-                      {p.notes}
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.88rem', fontWeight: 700, color: '#fff' }}>
+                      {p.drug_name}
                     </div>
-                  )}
+                    <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                      {p.dosage && <span>{p.dosage}</span>}
+                      {p.frequency && <span>· {p.frequency}</span>}
+                      {p.duration && <span>· {p.duration}</span>}
+                    </div>
+                    {p.notes && (
+                      <div style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.35)', fontStyle: 'italic' }}>
+                        {p.notes}
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => handleDelete(p.id)}
+                    disabled={deletingId === p.id}
+                    style={{
+                      flexShrink: 0, width: '24px', height: '24px',
+                      background: 'rgba(255,90,95,0.12)',
+                      border: '1px solid rgba(255,90,95,0.25)',
+                      borderRadius: '50%', cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: 'rgba(255,90,95,0.8)', fontSize: '0.7rem', lineHeight: 1,
+                      marginTop: '2px',
+                    }}
+                  >✕</button>
                 </div>
               ))}
             </div>
