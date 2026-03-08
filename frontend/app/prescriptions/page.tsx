@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 import BottomNav from '@/components/BottomNav'
 import ScreenHeader from '@/components/ScreenHeader'
 import { getPrescriptions, deletePrescription, getDrugs, saveDrug, lookupDrug, parseVisitPrescription } from '@/lib/api'
@@ -64,6 +65,8 @@ async function extractTextFromPdf(file: File): Promise<string> {
 }
 
 export default function PrescriptionsPage() {
+  const searchParams = useSearchParams()
+  const tab = searchParams.get('tab')
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -121,6 +124,12 @@ export default function PrescriptionsPage() {
   }
 
   useEffect(() => { load() }, [])
+
+  useEffect(() => {
+    if (tab === 'lookup') {
+      setActiveTab('lookup')
+    }
+  }, [tab])
 
   // Drug acts
   async function addDrugToLookup() {

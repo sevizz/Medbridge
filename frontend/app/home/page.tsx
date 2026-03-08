@@ -8,7 +8,12 @@ import { getReminders } from '@/lib/api'
 
 const CARDS = [
   {
-    icon: '📋',
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+      </svg>
+    ),
     title: 'Discharge Explainer',
     desc: 'Upload your summary and get a plain-language explanation in your language.',
     path: '/discharge',
@@ -18,7 +23,15 @@ const CARDS = [
     glow: 'rgba(255,90,95,0.15)',
   },
   {
-    icon: '🩺',
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M11 2v2" />
+        <path d="M5 2v2" />
+        <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" />
+        <path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4" />
+        <circle cx="20" cy="10" r="2" />
+      </svg>
+    ),
     title: 'Symptom Checker',
     desc: 'Describe how you\'re feeling and get guidance on what to do next.',
     path: '/symptom',
@@ -28,7 +41,12 @@ const CARDS = [
     glow: 'rgba(167,139,250,0.15)',
   },
   {
-    icon: '💊',
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" />
+        <path d="m8.5 8.5 7 7" />
+      </svg>
+    ),
     title: 'Prescription History',
     desc: 'View and manage your full prescription history over time.',
     path: '/prescriptions',
@@ -36,6 +54,21 @@ const CARDS = [
     border: 'rgba(251,191,36,0.25)',
     accent: '#FBBF24',
     glow: 'rgba(251,191,36,0.12)',
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+    ),
+    title: 'Drug Lookup',
+    desc: 'Search for medication details, side effects, and safety information.',
+    path: '/prescriptions?tab=lookup',
+    grad: 'linear-gradient(135deg, rgba(0,201,167,0.18) 0%, rgba(0,201,167,0.03) 100%)',
+    border: 'rgba(0,201,167,0.25)',
+    accent: '#00C9A7',
+    glow: 'rgba(0,201,167,0.15)',
   },
 ]
 
@@ -46,10 +79,20 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [scrolled, setScrolled] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yy = String(d.getFullYear()).slice(-2);
+    return `${dd}/${mm}/${yy}`;
+  };
 
   // Count pending (un-done) reminders
   const pendingCount = reminders.filter(r => !r.is_done).length
-  const nextMed = reminders.find(r => !r.is_done) || null
+  const nextMed = reminders.find(r => !r.is_done && !r.drug_name.startsWith('[APPT]')) || null
+  const nextAppt = reminders.find(r => !r.is_done && r.drug_name.startsWith('[APPT]')) || null
 
   useEffect(() => {
     const timeout = setTimeout(() => setLoading(false), 5000)
@@ -169,57 +212,141 @@ export default function HomePage() {
         <div style={{ padding: '0 16px 16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
           {/* Next medication strip — hides when scrolled */}
-          <div
-            onClick={() => router.push('/reminders')}
-            className={nextMed ? 'pulsing' : ''}
-            style={{
-              background: 'rgba(255,255,255,0.04)',
-              backdropFilter: 'blur(24px)',
-              WebkitBackdropFilter: 'blur(24px)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              borderLeft: `4px solid ${nextMed ? '#FF5A5F' : 'rgba(255,255,255,0.1)'}`,
-              borderRadius: '16px', padding: '16px 20px',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              cursor: 'pointer',
-              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-              opacity: scrolled ? 0 : 1,
-              maxHeight: scrolled ? '0px' : '100px',
-              overflow: 'hidden',
-              marginBottom: scrolled ? '-12px' : '4px',
-              pointerEvents: scrolled ? 'none' : 'auto',
-              boxShadow: nextMed ? '0 8px 24px rgba(255,90,95,0.12)' : 'none',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          {/* Medication Strip */}
+          {nextMed && (
+            <div
+              onClick={() => router.push('/reminders')}
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                backdropFilter: 'blur(24px)',
+                WebkitBackdropFilter: 'blur(24px)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderLeft: `4px solid #FF5A5F`,
+                borderRadius: '16px', padding: '16px 20px',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                cursor: 'pointer',
+                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                opacity: scrolled ? 0 : 1,
+                maxHeight: scrolled ? '0px' : '100px',
+                overflow: 'hidden',
+                marginBottom: scrolled ? '-12px' : '4px',
+                pointerEvents: scrolled ? 'none' : 'auto',
+                boxShadow: '0 8px 24px rgba(255,90,95,0.12)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{
+                  width: '38px', height: '38px', borderRadius: '10px',
+                  background: 'rgba(255, 90, 95, 0.12)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  border: '1px solid rgba(255,90,95,0.2)',
+                  color: '#FF5A5F'
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                  </svg>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.01em' }}>
+                    Next medication due
+                  </div>
+                  <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.45)', marginTop: '2px', fontWeight: 500 }}>
+                    {nextMed.drug_name}
+                  </div>
+                </div>
+              </div>
               <div style={{
-                width: '38px', height: '38px', borderRadius: '10px',
-                background: nextMed ? 'rgba(255, 90, 95, 0.12)' : 'rgba(255,255,255,0.05)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.2rem',
-                border: `1px solid ${nextMed ? 'rgba(255,90,95,0.2)' : 'rgba(255,255,255,0.08)'}`
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem',
+                color: '#FF7B7F',
+                fontWeight: 600,
+                background: 'rgba(255,90,95,0.08)',
+                padding: '4px 8px',
+                borderRadius: '6px'
               }}>
-                🔔
-              </div>
-              <div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.01em' }}>
-                  Next medication due
-                </div>
-                <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.45)', marginTop: '2px', fontWeight: 500 }}>
-                  {nextMed ? nextMed.drug_name : 'All caught up for now'}
-                </div>
+                {nextMed.time_of_day?.slice(0, 5)}
               </div>
             </div>
-            <div style={{
-              fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem',
-              color: nextMed ? '#FF7B7F' : 'rgba(255,255,255,0.4)',
-              fontWeight: 600,
-              background: nextMed ? 'rgba(255,90,95,0.08)' : 'transparent',
-              padding: nextMed ? '4px 8px' : '0',
-              borderRadius: '6px'
-            }}>
-              {nextMed ? nextMed.time_of_day?.slice(0, 5) : '—'}
+          )}
+
+          {/* Appointment Strip */}
+          {nextAppt && (
+            <div
+              onClick={() => router.push('/reminders')}
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                backdropFilter: 'blur(24px)',
+                WebkitBackdropFilter: 'blur(24px)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderLeft: `4px solid #FF5A5F`,
+                borderRadius: '16px', padding: '16px 20px',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                cursor: 'pointer',
+                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                opacity: scrolled ? 0 : 1,
+                maxHeight: scrolled ? '0px' : '100px',
+                overflow: 'hidden',
+                marginBottom: scrolled ? '-12px' : '4px',
+                pointerEvents: scrolled ? 'none' : 'auto',
+                boxShadow: '0 8px 24px rgba(255,90,95,0.1)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{
+                  width: '38px', height: '38px', borderRadius: '10px',
+                  background: 'rgba(255, 90, 95, 0.12)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  border: '1px solid rgba(255,90,95,0.2)',
+                  color: '#FF5A5F'
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                  </svg>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.01em' }}>
+                    Next appointment
+                  </div>
+                  <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.45)', marginTop: '2px', fontWeight: 500 }}>
+                    {nextAppt.drug_name.replace('[APPT] ', '')} · {formatDate(nextAppt.date)}
+                  </div>
+                </div>
+              </div>
+              <div style={{
+                fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem',
+                color: '#FF7B7F',
+                fontWeight: 600,
+                background: 'rgba(255,90,95,0.08)',
+                padding: '4px 8px',
+                borderRadius: '6px'
+              }}>
+                {nextAppt.time_of_day?.slice(0, 5)}
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* Caught up message if nothing due */}
+          {!nextMed && !nextAppt && (
+            <div
+              onClick={() => router.push('/reminders')}
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                backdropFilter: 'blur(24px)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '16px', padding: '16px 20px',
+                display: 'flex', alignItems: 'center', gap: '14px',
+                opacity: scrolled ? 0 : 0.6,
+                pointerEvents: scrolled ? 'none' : 'auto',
+                transition: 'all 0.4s',
+                marginBottom: '4px'
+              }}
+            >
+              <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>
+                All caught up for now
+              </div>
+            </div>
+          )}
 
           {/* Feature cards */}
           {CARDS.map(card => (
