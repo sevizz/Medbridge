@@ -48,8 +48,7 @@ const LBL: React.CSSProperties = {
 
 async function extractTextFromPdf(file: File): Promise<string> {
   const pdfjsLib = await import('pdfjs-dist')
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`
-
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
   const arrayBuffer = await file.arrayBuffer()
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
   const texts: string[] = []
@@ -793,9 +792,6 @@ export default function PrescriptionsPage() {
                         </div>
                       </div>
                     ))}
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,201,167,0.1)', border: '1px solid rgba(0,201,167,0.25)', padding: '5px 12px', borderRadius: '20px', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.58rem', color: '#00C9A7' }}>
-                      Sourced from OpenFDA
-                    </div>
                   </>
                 )}
               </div>

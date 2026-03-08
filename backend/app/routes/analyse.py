@@ -2,9 +2,16 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from app.config import groq, supabase
 from app.auth import get_user_id
+from deep_translator import GoogleTranslator
 import json
 
 router = APIRouter()
+
+def translate_result(result: dict, target_lang: str) -> dict:
+    return {
+        k: GoogleTranslator(source='en', target=target_lang).translate(v)
+        for k, v in result.items()
+    }
 
 class AnalyseRequest(BaseModel):
     text: str
@@ -12,14 +19,8 @@ class AnalyseRequest(BaseModel):
 
 @router.post("/analyse")
 async def analyse(req: AnalyseRequest, user_id: str = Depends(get_user_id)):
-    lang_map = {
-        "en": "Respond entirely in English.",
-        "ta": "Respond with English headings and Tamil (தமிழ்) explanations.",
-        "hi": "Respond with English headings and Hindi (Devanagari) explanations."
-    }
-
     prompt = f"""You are MedBridge. Explain this discharge summary simply for a non-medical patient.
-{lang_map.get(req.language, lang_map['en'])}
+Respond entirely in English.
 Return ONLY JSON: {{"what_happened":"...","home_care":"...","warning_signs":"...","follow_up":"..."}}
 Discharge summary: {req.text}"""
 
@@ -29,6 +30,11 @@ Discharge summary: {req.text}"""
         messages=[{"role": "user", "content": prompt}]
     )
     result = json.loads(response.choices[0].message.content.replace("```json","").replace("```","").strip())
+
+    if req.language == "ta":
+        result = translate_result(result, "ta")
+    elif req.language == "hi":
+        result = translate_result(result, "hi")
 
     supabase.table("discharge_analyses").insert({
         "user_id": user_id,

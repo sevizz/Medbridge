@@ -194,7 +194,7 @@ export default function SymptomPage() {
                   boxShadow: cls === 'urgent' ? '0 0 16px rgba(255,90,95,0.45)' : 'none',
                 }}
               >
-                {cls === 'urgent' ? `📲 Alert Dr. ${docLast} now` : `📲 Notify Dr. ${docLast}`}
+                {cls === 'urgent' ? `Alert Dr. ${docLast} now` : `Notify Dr. ${docLast}`}
               </button>
             )}
           </div>
@@ -245,7 +245,7 @@ export default function SymptomPage() {
                 disabled={sending}
                 style={{ width: '100%', padding: '14px', background: '#25D366', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '0.88rem', fontWeight: 700, cursor: sending ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '8px', opacity: sending ? 0.7 : 1 }}
               >
-                {sending ? 'Sending…' : '📲 Send via WhatsApp'}
+                {sending ? 'Sending…' : 'Send via WhatsApp'}
               </button>
               <button
                 onClick={() => setModal(false)}
