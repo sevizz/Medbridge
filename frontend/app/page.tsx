@@ -7,14 +7,12 @@ export default function Root() {
   const router = useRouter()
 
   useEffect(() => {
-    // First, check if there's already a session
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
         router.replace('/home')
       }
     })
 
-    // Then listen for auth state changes (handles the post-login case)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
         router.replace('/home')

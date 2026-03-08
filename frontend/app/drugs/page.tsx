@@ -39,7 +39,6 @@ export default function DrugsPage() {
       <ScreenHeader title="Drug Info Lookup" />
       <div style={{ flex: 1, overflowY: 'auto', padding: '16px 12px', paddingBottom: '96px' }}>
 
-        {/* Add input row */}
         <div style={{ display: 'flex', gap: '8px', marginBottom: '18px' }}>
           <input
             value={input}
@@ -67,7 +66,6 @@ export default function DrugsPage() {
           >+ Add</button>
         </div>
 
-        {/* Section label */}
         <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.61rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.35)', marginBottom: '12px' }}>
           Your Prescription
         </div>
@@ -78,7 +76,6 @@ export default function DrugsPage() {
           </div>
         )}
 
-        {/* Drug chips */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '22px' }}>
           {drugs.map(d => (
             <div
@@ -98,7 +95,6 @@ export default function DrugsPage() {
           ))}
         </div>
 
-        {/* Detail card */}
         {(loading || detail) && (
           <div style={{
             background: 'rgba(255,255,255,0.07)',

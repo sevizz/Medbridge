@@ -70,12 +70,10 @@ export default function PrescriptionsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
-  // Form state
   const [showForm, setShowForm] = useState(false)
   const [formStep, setFormStep] = useState(1)
   const [adding, setAdding] = useState(false)
 
-  // Step 1
   const [patientName, setPatientName] = useState('')
   const [patientAge, setPatientAge] = useState('')
   const [reason, setReason] = useState('')
@@ -85,27 +83,21 @@ export default function PrescriptionsPage() {
   const [prescriptionDate, setPrescriptionDate] = useState(new Date().toISOString().split('T')[0])
   const [numMedicines, setNumMedicines] = useState('1')
 
-  // Step 2
   const [medicines, setMedicines] = useState<MedicationDetails[]>([])
 
-  // UI state
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [idToDelete, setIdToDelete] = useState<string | null>(null)
 
-  // PDF Upload state
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-  // Reader view state
   const [viewingData, setViewingData] = useState<{ id: string, visit: VisitPrescription, created_at: string } | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [savingEdit, setSavingEdit] = useState(false)
   const [extracting, setExtracting] = useState(false)
 
-  // Tabs state
   const [activeTab, setActiveTab] = useState<'history' | 'lookup'>('history')
 
-  // Drug Lookup State
   const [allDrugs, setAllDrugs] = useState<string[]>([])
   const [drugInput, setDrugInput] = useState('')
   const [selectedDrug, setSelectedDrug] = useState<string | null>(null)
@@ -130,7 +122,6 @@ export default function PrescriptionsPage() {
     }
   }, [tab])
 
-  // Drug acts
   async function addDrugToLookup() {
     const v = drugInput.trim(); if (!v) return
     if (!allDrugs.includes(v)) { await saveDrug(v).catch(() => { }); setAllDrugs(p => [...p, v]) }
@@ -229,7 +220,6 @@ export default function PrescriptionsPage() {
       const text = await extractTextFromPdf(selectedFile)
       const data = await parseVisitPrescription(text)
 
-      // Populate form
       setPatientName(data.patientName || '')
       setPatientAge(data.patientAge || '')
       setReason(data.reasonForVisit || '')
@@ -315,7 +305,6 @@ export default function PrescriptionsPage() {
     <div style={{ width: '430px', minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
       <ScreenHeader title="Prescriptions & Drugs" />
 
-      {/* Tab Navigation */}
       <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)' }}>
         <div
           onClick={() => setActiveTab('history')}
@@ -347,7 +336,6 @@ export default function PrescriptionsPage() {
 
         {activeTab === 'history' && (
           <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {/* Inline Add Prescription button & PDF Upload */}
             {!showForm && (
               <>
                 <div style={{ display: 'flex', gap: '12px', margin: '16px 0 8px' }}>
@@ -432,7 +420,7 @@ export default function PrescriptionsPage() {
             )}
 
             {!loading && !error && prescriptions.length === 0 && !showForm && (
-              <div style={{ textAlign: 'center', padding: '60px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+              <div style={{ textAlign: 'center', padding: '60px 0', display: 'flex', flexDirection: 'center', alignItems: 'center', gap: '12px' }}>
                 <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '0.9rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)' }}>No prescriptions yet</div>
                 <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)', maxWidth: '200px', lineHeight: 1.6 }}>
                   Upload prescription PDF to add prescription, or add one manually below.
@@ -440,7 +428,6 @@ export default function PrescriptionsPage() {
               </div>
             )}
 
-            {/* Prescription List grouped by Date */}
             {!loading && Object.entries(grouped).map(([date, items]) => (
               <div key={date} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <div style={{
@@ -519,7 +506,6 @@ export default function PrescriptionsPage() {
               </div>
             ))}
 
-            {/* Add Prescription Forms */}
             {showForm && (
               <>
                 {formStep === 1 && (
@@ -699,10 +685,8 @@ export default function PrescriptionsPage() {
           </div>
         )}
 
-        {/* DRUG LOOKUP TAB SECTION */}
         {activeTab === 'lookup' && (
           <div className="fade-in">
-            {/* Add input row */}
             <div style={{ display: 'flex', gap: '8px', marginBottom: '18px' }}>
               <input
                 value={drugInput}
@@ -730,7 +714,6 @@ export default function PrescriptionsPage() {
               >+ Lookup</button>
             </div>
 
-            {/* Section label */}
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.61rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.35)', marginBottom: '12px' }}>
               Saved Drugs
             </div>
@@ -741,7 +724,6 @@ export default function PrescriptionsPage() {
               </div>
             )}
 
-            {/* Drug chips */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '22px' }}>
               {allDrugs.map(d => (
                 <div
@@ -761,7 +743,6 @@ export default function PrescriptionsPage() {
               ))}
             </div>
 
-            {/* Detail card */}
             {(drugLoading || drugDetail) && (
               <div style={{
                 background: 'rgba(255,255,255,0.07)',
@@ -792,6 +773,17 @@ export default function PrescriptionsPage() {
                         </div>
                       </div>
                     ))}
+                    {drugDetail.source === 'OpenFDA' && (
+                      <div style={{
+                        marginTop: '20px', paddingTop: '12px',
+                        borderTop: '1px solid rgba(255,255,255,0.06)',
+                        fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem',
+                        color: 'rgba(255,255,255,0.25)', textAlign: 'center',
+                        letterSpacing: '0.05em'
+                      }}>
+                        Sourced from OpenFDA
+                      </div>
+                    )}
                   </>
                 )}
               </div>
@@ -800,7 +792,6 @@ export default function PrescriptionsPage() {
         )}
       </div>
 
-      {/* Reader / Edit Modal */}
       {viewingData && (
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
@@ -825,7 +816,6 @@ export default function PrescriptionsPage() {
           </div>
 
           <div style={{ flex: 1, overflowY: 'auto', padding: '20px', paddingBottom: '100px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {/* Visit Details */}
             <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '16px', padding: '16px', border: '1px solid rgba(255,255,255,0.08)' }}>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#00C9A7', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px' }}>Visit Info</div>
 
@@ -900,7 +890,6 @@ export default function PrescriptionsPage() {
               </div>
             </div>
 
-            {/* Medications List */}
             <div>
               <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.65rem', color: '#00C9A7', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px', marginLeft: '4px' }}>Prescribed Medicines</div>
 
@@ -911,7 +900,7 @@ export default function PrescriptionsPage() {
 
                     {isEditing ? (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                        <div><label style={LBL}>Name</label><input style={GLS} value={med.drug_name} onChange={e => updateEditMed(idx, 'drug_name', e.target.value)} /></div>
+                        <div><label style={LBL}>Name *</label><input style={GLS} value={med.drug_name} onChange={e => updateEditMed(idx, 'drug_name', e.target.value)} /></div>
                         <div style={{ display: 'flex', gap: '8px' }}>
                           <div style={{ flex: 1 }}><label style={LBL}>Dosage</label><input style={GLS} value={med.dosage} onChange={e => updateEditMed(idx, 'dosage', e.target.value)} /></div>
                           <div style={{ flex: 1 }}><label style={LBL}>Frequency</label><input style={GLS} value={med.frequency} onChange={e => updateEditMed(idx, 'frequency', e.target.value)} /></div>
@@ -941,7 +930,6 @@ export default function PrescriptionsPage() {
 
       <BottomNav />
 
-      {/* Custom Deletion Modal */}
       {showDeleteModal && (
         <div style={{
           position: 'fixed', top: 0, left: '50%', transform: 'translateX(-50%)',

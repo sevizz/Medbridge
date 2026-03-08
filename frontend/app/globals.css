@@ -9,11 +9,9 @@
 }
 
 :root {
-  /* Base gradient */
   --bg-from: #0F0C29;
   --bg-to: #1A1A4E;
 
-  /* Accent palette */
   --coral: #FF5A5F;
   --coral-d: #E04449;
   --teal: #00C9A7;
@@ -22,25 +20,20 @@
   --mint: #34D399;
   --wa-green: #25D366;
 
-  /* Glass surfaces */
   --glass: rgba(255, 255, 255, 0.07);
   --glass-hover: rgba(255, 255, 255, 0.11);
   --glass-border: rgba(255, 255, 255, 0.12);
   --glass-border-strong: rgba(255, 255, 255, 0.2);
 
-  /* Text */
   --text: rgba(255, 255, 255, 0.95);
   --text-sub: rgba(255, 255, 255, 0.55);
   --text-muted: rgba(255, 255, 255, 0.35);
 
-  /* Coral CTA gradient */
   --coral-grad: linear-gradient(135deg, #FF5A5F 0%, #E04449 100%);
   --coral-glow: 0 0 24px rgba(255, 90, 95, 0.45), 0 4px 16px rgba(255, 90, 95, 0.3);
 
-  /* Teal */
   --teal-glow: 0 0 20px rgba(0, 201, 167, 0.35);
 
-  /* Lavender */
   --lavender-grad: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 100%);
   --lavender-glow: 0 0 20px rgba(167, 139, 250, 0.4);
 }
@@ -58,14 +51,12 @@ body {
   color: var(--text);
 }
 
-/* Enforce full-width on every page */
 body>* {
   width: 100%;
   max-width: 430px;
   flex-shrink: 0;
 }
 
-/* Subtle grain overlay */
 body::before {
   content: '';
   position: fixed;
@@ -76,7 +67,6 @@ body::before {
   opacity: 0.25;
 }
 
-/* Global radial glows */
 body::after {
   content: '';
   position: fixed;
@@ -96,7 +86,6 @@ body::after {
   display: none;
 }
 
-/* Glass utility */
 .glass {
   background: var(--glass);
   backdrop-filter: blur(20px);
@@ -104,7 +93,6 @@ body::after {
   border: 1px solid var(--glass-border);
 }
 
-/* Input base */
 input,
 textarea,
 select {
@@ -117,14 +105,12 @@ textarea::placeholder {
   color: var(--text-muted);
 }
 
-/* ── Button hover feedback ─────────────────────────── */
 button {
   position: relative;
   overflow: hidden;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* Tint overlay — shifts the button to a lighter shade on hover */
 button::after {
   content: '';
   position: absolute;
@@ -152,7 +138,6 @@ button:not(:disabled):active::after {
   background: rgba(0, 0, 0, 0.08);
 }
 
-/* For div-based clickable elements (cards, nav items) */
 .pressable {
   position: relative;
   overflow: hidden;
@@ -187,7 +172,6 @@ button:not(:disabled):active::after {
   background: rgba(0, 0, 0, 0.07);
 }
 
-/* Keyframes */
 @keyframes spin {
   to {
     transform: rotate(360deg);

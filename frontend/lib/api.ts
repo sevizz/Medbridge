@@ -21,9 +21,12 @@ export async function notifyDoctor(p: { symptom_text: string; classification: st
   if (!res.ok) throw new Error(await res.text()); return res.json()
 }
 export async function getReminders() {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Not authenticated')
   const today = new Date().toISOString().split('T')[0]
   const { data, error } = await supabase.from('reminders')
     .select('*')
+    .eq('user_id', user.id)
     .gte('date', today)
     .order('date')
     .order('time_of_day')
@@ -46,11 +49,15 @@ export async function deleteReminder(id: string) {
   if (error) throw error
 }
 export async function toggleReminder(id: string, is_done: boolean) {
-  const { error } = await supabase.from('reminders').update({ is_done }).eq('id', id)
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Not authenticated')
+  const { error } = await supabase.from('reminders').update({ is_done }).eq('id', id).eq('user_id', user.id)
   if (error) throw error
 }
 export async function getDrugs() {
-  const { data, error } = await supabase.from('drugs').select('*').order('created_at')
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Not authenticated')
+  const { data, error } = await supabase.from('drugs').select('*').eq('user_id', user.id).order('created_at')
   if (error) throw error; return data || []
 }
 export async function saveDrug(drug_name: string) {
@@ -80,7 +87,6 @@ export async function deletePrescription(id: string) {
   if (error) throw error
 }
 export async function extractAndSavePrescriptions(text: string) {
-  // Use backend /analyse with a special prompt to extract meds as JSON array
   const extractPrompt = `You are a medical data extractor. Extract ALL medications mentioned in this discharge summary.
 Return ONLY a valid JSON array, no other text or markdown:
 [{"drug_name":"...","dosage":"...","frequency":"...","duration":"...","notes":"..."}]
@@ -95,16 +101,11 @@ ${text}`
   if (!res.ok) throw new Error('Failed to extract prescriptions')
 
   const raw = await res.json()
-  // The /analyse endpoint returns { what_happened, home_care, warning_signs, follow_up }
-  // When given our extraction prompt, the full text ends up in what_happened
-  // Try to parse the JSON array from the response text
   const responseText = typeof raw === 'string' ? raw : JSON.stringify(raw)
   let medications: any[] = []
   try {
-    // Try parsing the whole response as array first
     medications = JSON.parse(responseText)
   } catch {
-    // Try extracting JSON array from within the text
     const match = responseText.match(/\[[\s\S]*\]/)
     if (match) medications = JSON.parse(match[0])
   }

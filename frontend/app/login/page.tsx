@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { signIn } from '@/lib/auth'
 
-/* ─── shared primitives ────────────────────────────────── */
 const GLS_INP: React.CSSProperties = {
   width: '100%',
   background: 'rgba(255,255,255,0.07)',
@@ -26,7 +25,6 @@ const LABEL: React.CSSProperties = {
   marginBottom: '7px',
 }
 
-/* ─── EKG SVG hero ──────────────────────────────────────── */
 function EkgHero() {
   return (
     <div style={{ position: 'relative', height: '56px', marginBottom: '8px' }}>
@@ -51,7 +49,6 @@ function EkgHero() {
           </linearGradient>
         </defs>
       </svg>
-      {/* Pulsing heart dot */}
       <div className="pulsing" style={{
         position: 'absolute',
         top: '50%',
@@ -93,13 +90,11 @@ export default function LoginPage() {
       display: 'flex', flexDirection: 'column',
       position: 'relative', zIndex: 1,
     }}>
-      {/* Glows */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
         <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,90,95,0.18) 0%, transparent 70%)' }} />
         <div style={{ position: 'absolute', bottom: '-60px', left: '-60px', width: '320px', height: '320px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,201,167,0.12) 0%, transparent 70%)' }} />
       </div>
 
-      {/* Hero */}
       <div style={{ padding: '28px 28px 20px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
         <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '2rem', fontWeight: 800, color: 'rgba(255,255,255,0.95)', letterSpacing: '-0.04em', marginBottom: '4px' }}>
           Med<span style={{ color: '#FF5A5F', textShadow: '0 0 20px rgba(255,90,95,0.6)' }}>Bridge</span>
@@ -110,9 +105,7 @@ export default function LoginPage() {
         <EkgHero />
       </div>
 
-      {/* Form */}
       <div style={{ padding: '4px 16px 36px', flex: 1, overflowY: 'auto', position: 'relative', zIndex: 2 }}>
-        {/* Tab row */}
         <div style={{ display: 'flex', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '14px', padding: '4px', marginBottom: '22px' }}>
           <div style={{ flex: 1, padding: '10px', textAlign: 'center', borderRadius: '10px', background: 'linear-gradient(135deg,#FF5A5F,#E04449)', boxShadow: '0 0 16px rgba(255,90,95,0.4)', color: '#fff', fontSize: '0.82rem', fontWeight: 700 }}>Sign In</div>
           <div onClick={() => router.push('/signup')} style={{ flex: 1, padding: '10px', textAlign: 'center', borderRadius: '10px', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.4)' }}>Create Account</div>

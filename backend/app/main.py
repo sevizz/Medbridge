@@ -6,7 +6,7 @@ app = FastAPI(title="MedBridge API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # tighten this to your Vercel URL in production
+    allow_origins=["*"],   
     allow_methods=["*"],
     allow_headers=["*"]
 )

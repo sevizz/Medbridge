@@ -31,13 +31,11 @@ export default function ProfilePage() {
     <div style={{ width: '430px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div style={{ flex: 1, overflowY: 'auto', paddingBottom: '96px' }}>
 
-        {/* Profile header */}
         <div style={{
           padding: '28px 16px 32px', textAlign: 'center', position: 'relative',
           background: 'linear-gradient(180deg, rgba(255,90,95,0.12) 0%, transparent 100%)',
           borderBottom: '1px solid rgba(255,255,255,0.08)',
         }}>
-          {/* Avatar */}
           <div style={{
             width: '72px', height: '72px', borderRadius: '50%',
             background: 'linear-gradient(135deg,#FF5A5F 0%, #A78BFA 100%)',
@@ -76,7 +74,6 @@ export default function ProfilePage() {
 
           <div style={SEC}>Doctor on Record</div>
 
-          {/* WhatsApp doctor card */}
           <div style={{
             background: 'rgba(37,211,102,0.06)',
             backdropFilter: 'blur(16px)',

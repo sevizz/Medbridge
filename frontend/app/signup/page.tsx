@@ -54,13 +54,11 @@ export default function SignupPage() {
       display: 'flex', flexDirection: 'column',
       position: 'relative', zIndex: 1,
     }}>
-      {/* Glows */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
         <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '300px', height: '300px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,90,95,0.18) 0%, transparent 70%)' }} />
         <div style={{ position: 'absolute', bottom: '-60px', left: '-60px', width: '320px', height: '320px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,201,167,0.12) 0%, transparent 70%)' }} />
       </div>
 
-      {/* Header */}
       <div style={{ padding: '20px 28px 14px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
         <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.7rem', fontWeight: 800, color: 'rgba(255,255,255,0.95)', letterSpacing: '-0.04em', marginBottom: '4px' }}>
           Med<span style={{ color: '#FF5A5F', textShadow: '0 0 20px rgba(255,90,95,0.6)' }}>Bridge</span>
@@ -70,9 +68,7 @@ export default function SignupPage() {
         </div>
       </div>
 
-      {/* Form */}
       <div style={{ padding: '0 16px 36px', flex: 1, overflowY: 'auto', position: 'relative', zIndex: 2 }}>
-        {/* Tabs */}
         <div style={{ display: 'flex', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '14px', padding: '4px', marginBottom: '18px' }}>
           <div onClick={() => router.push('/login')} style={{ flex: 1, padding: '10px', textAlign: 'center', borderRadius: '10px', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.4)' }}>Sign In</div>
           <div style={{ flex: 1, padding: '10px', textAlign: 'center', borderRadius: '10px', background: 'linear-gradient(135deg,#FF5A5F,#E04449)', boxShadow: '0 0 16px rgba(255,90,95,0.4)', color: '#fff', fontSize: '0.82rem', fontWeight: 700 }}>Create Account</div>

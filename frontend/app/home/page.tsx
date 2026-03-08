@@ -89,7 +89,6 @@ export default function HomePage() {
     return `${dd}/${mm}/${yy}`;
   };
 
-  // Count pending (un-done) reminders
   const pendingCount = reminders.filter(r => !r.is_done).length
   const nextMed = reminders.find(r => !r.is_done && !r.drug_name.startsWith('[APPT]')) || null
   const nextAppt = reminders.find(r => !r.is_done && r.drug_name.startsWith('[APPT]')) || null
@@ -127,7 +126,6 @@ export default function HomePage() {
         onScroll={handleScroll}
         style={{ flex: 1, overflowY: 'auto', paddingBottom: '96px' }}
       >
-        {/* Header */}
         <div style={{ padding: '20px 24px 20px', position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
@@ -160,7 +158,6 @@ export default function HomePage() {
                   <path d="M4 21v-1a8 8 0 0116 0v1" />
                 </svg>
               </div>
-              {/* Online indicator */}
               <div style={{
                 position: 'absolute', bottom: '1px', right: '1px',
                 width: '10px', height: '10px', borderRadius: '50%',
@@ -170,7 +167,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Header row: recovery badge + floating notif when scrolled */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div
               onClick={() => router.push('/reminders')}
@@ -211,8 +207,7 @@ export default function HomePage() {
 
         <div style={{ padding: '0 16px 16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
-          {/* Next medication strip — hides when scrolled */}
-          {/* Medication Strip */}
+
           {nextMed && (
             <div
               onClick={() => router.push('/reminders')}
@@ -269,7 +264,6 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Appointment Strip */}
           {nextAppt && (
             <div
               onClick={() => router.push('/reminders')}
@@ -326,7 +320,6 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Caught up message if nothing due */}
           {!nextMed && !nextAppt && (
             <div
               onClick={() => router.push('/reminders')}
@@ -348,7 +341,6 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Feature cards */}
           {CARDS.map(card => (
             <div
               key={card.path}
@@ -392,7 +384,6 @@ export default function HomePage() {
                   transition: 'transform 0.2s ease'
                 }}>›</div>
               </div>
-              {/* Subtle background glow element */}
               <div style={{
                 position: 'absolute', top: '-20%', right: '-10%',
                 width: '100px', height: '100px',

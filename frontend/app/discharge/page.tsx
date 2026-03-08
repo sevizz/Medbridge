@@ -63,7 +63,6 @@ export default function DischargePage() {
       }
       setPdfExtracting(false)
     } else {
-      // Plain text file
       const reader = new FileReader()
       reader.onload = ev => {
         setText(ev.target?.result as string)
@@ -77,7 +76,7 @@ export default function DischargePage() {
       <ScreenHeader title="Discharge Explainer" />
       <div style={{ flex: 1, overflowY: 'auto', padding: '16px 0', display: 'flex', flexDirection: 'column', gap: '12px', paddingBottom: '96px' }}>
 
-        {/* Upload zone */}
+
         <div
           onClick={() => document.getElementById('file-input')?.click()}
           style={{
@@ -105,7 +104,6 @@ export default function DischargePage() {
           </div>
         </div>
 
-        {/* Language toggles */}
         <div style={{ display: 'flex', gap: '8px' }}>
           {LANGS.map(([code, label]) => (
             <button
@@ -126,7 +124,6 @@ export default function DischargePage() {
           ))}
         </div>
 
-        {/* Textarea */}
         <textarea
           value={text}
           onChange={e => { setText(e.target.value) }}
@@ -143,7 +140,6 @@ export default function DischargePage() {
         />
 
         <div style={{ display: 'flex', gap: '8px' }}>
-          {/* Analyse button */}
           <button
             onClick={analyse}
             disabled={loading || !text.trim() || pdfExtracting}
@@ -164,7 +160,6 @@ export default function DischargePage() {
           </button>
         </div>
 
-        {/* Analysis results */}
         {result && (
           <div className="fade-in" style={{
             background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)',

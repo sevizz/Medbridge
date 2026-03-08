@@ -15,7 +15,6 @@ export default function RemindersPage() {
   const [time, setTime] = useState('08:00')
   const [dose, setDose] = useState('')
 
-  // Tab & Appointment State
   const [activeTab, setActiveTab] = useState<'medicine' | 'appointment'>('medicine')
   const [apptDoctor, setApptDoctor] = useState('')
   const [apptLocation, setApptLocation] = useState('')
@@ -34,7 +33,6 @@ export default function RemindersPage() {
     return `${dd}/${mm}/${yy}`;
   };
 
-  // Custom Deletion State
   const [isDeleting, setIsDeleting] = useState(false)
   const [deleteId, setDeleteId] = useState<string | null>(null)
 
@@ -67,25 +65,20 @@ export default function RemindersPage() {
   async function add() {
     if (activeTab === 'medicine') {
       if (!drug || !time) return
-      // Medicine defaults to 'today' inside the api function.
       await addReminder(drug, dose || '1 dose', time).catch(() => { })
       setDrug(''); setDose('')
     } else {
       if (!apptDoctor || !apptTime || !apptDate) return
       await addReminder(`[APPT] ${apptDoctor}`, apptLocation || 'Clinic', apptTime, apptDate).catch(() => { })
       setApptDoctor(''); setApptLocation('')
-      // Keep date the same incase they enter multiple for one day
     }
     load()
   }
 
-  // Filter meds to ONLY show today's, per the ui convention
   const meds = reminders.filter(r => !r.drug_name.startsWith('[APPT]') && r.date === todayString)
 
-  // Appointments should show all upcoming (where date >= today happens automatically in API)
   const appts = reminders.filter(r => r.drug_name.startsWith('[APPT]'))
 
-  // Warm cream input — matches the reference screenshot
   const INP: React.CSSProperties = {
     width: '100%',
     padding: '15px 16px',
@@ -123,7 +116,6 @@ export default function RemindersPage() {
       <ScreenHeader title="Reminders & History" back="/home" />
       <div style={{ flex: 1, overflowY: 'auto', padding: '20px 12px 0', paddingBottom: '96px' }}>
 
-        {/* Today's Medications */}
         {meds.length > 0 && (
           <div style={{ marginBottom: '24px' }}>
             <div style={{ ...SEC, marginBottom: '12px' }}>Today's Medications</div>
@@ -188,7 +180,6 @@ export default function RemindersPage() {
           </div>
         )}
 
-        {/* Upcoming Appointments */}
         {appts.length > 0 && (
           <div style={{ marginBottom: '24px' }}>
             <div style={{ ...SEC, marginBottom: '12px' }}>Upcoming Appointments</div>
@@ -223,7 +214,7 @@ export default function RemindersPage() {
                     {r.drug_name.replace('[APPT] ', '')}
                   </div>
                   <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.45)', marginBottom: '4px' }}>
-                    {r.dose} {/* Dose is used for the location string */}
+                    {r.dose} 
                   </div>
                   <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>
                     {r.date === todayString ? 'Today' : (() => {
@@ -291,10 +282,8 @@ export default function RemindersPage() {
           </div>
         )}
 
-        {/* Add Reminder section */}
         <div style={{ ...SEC, marginTop: '12px' }}>Add Reminder</div>
 
-        {/* Tab Selection */}
         <div style={{ display: 'flex', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '4px', marginBottom: '20px' }}>
           <div
             onClick={() => setActiveTab('medicine')}
@@ -368,7 +357,6 @@ export default function RemindersPage() {
                   try {
                     apptDateRef.current?.showPicker()
                   } catch (e) {
-                    // Fallback for older browsers
                     apptDateRef.current?.click()
                   }
                 }}
@@ -390,7 +378,7 @@ export default function RemindersPage() {
                     height: '100%',
                     cursor: 'pointer',
                     colorScheme: 'dark',
-                    pointerEvents: 'none' // Let the container handle the click
+                    pointerEvents: 'none' 
                   }}
                   value={apptDate}
                   onChange={e => setApptDate(e.target.value)}
@@ -420,7 +408,6 @@ export default function RemindersPage() {
           </div>
         )}
 
-        {/* Dynamic button style based on tab */}
         <button
           onClick={add}
           disabled={(activeTab === 'medicine' && (!drug || !time)) || (activeTab === 'appointment' && (!apptDoctor || !apptTime))}
@@ -451,7 +438,6 @@ export default function RemindersPage() {
       </div>
       <BottomNav />
 
-      {/* Custom Deletion Modal */}
       {isDeleting && (
         <div style={{
           position: 'fixed', top: 0, left: '50%', transform: 'translateX(-50%)',

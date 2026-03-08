@@ -23,14 +23,12 @@ const CLS: Record<string, { glow: string; border: string; badgeBg: string; badge
 
 export default function SymptomPage() {
   const router = useRouter()
-  // Symptom state
   const [symptom, setSymptom] = useState('')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
   const [drugs, setDrugs] = useState<string[]>([])
 
-  // Action state
   const [modal, setModal] = useState(false)
   const [sent, setSent] = useState(false)
   const [sentTime, setSentTime] = useState('')
@@ -41,7 +39,6 @@ export default function SymptomPage() {
     getDrugs().then(d => setDrugs(d.map((x: any) => x.drug_name))).catch(() => { })
   }, [])
 
-  // Symptom actions
   async function classify() {
     if (!symptom.trim()) return
     setLoading(true); setResult(null); setSent(false)
@@ -73,7 +70,6 @@ export default function SymptomPage() {
       <ScreenHeader title="Symptom Checker" />
       <div style={{ flex: 1, overflowY: 'auto', padding: '16px 12px', paddingBottom: '96px', position: 'relative' }}>
 
-        {/* Textarea */}
         <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.38)', marginBottom: '8px' }}>
           Describe your symptom
         </div>
@@ -91,7 +87,6 @@ export default function SymptomPage() {
           }}
         />
 
-        {/* Suggestion chips */}
         <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.38)', marginBottom: '8px' }}>
           Common post-discharge symptoms
         </div>
@@ -115,7 +110,6 @@ export default function SymptomPage() {
           ))}
         </div>
 
-        {/* AI button */}
         <button
           onClick={classify}
           disabled={loading || !symptom.trim()}
@@ -137,7 +131,6 @@ export default function SymptomPage() {
             : ' Check Symptom'}
         </button>
 
-        {/* View Prescription History button */}
         <button
           onClick={() => router.push('/prescriptions')}
           style={{
@@ -156,7 +149,6 @@ export default function SymptomPage() {
            View Prescription History
         </button>
 
-        {/* Result */}
         {result && !sent && (
           <div className="fade-in" style={{
             borderRadius: '16px', padding: '18px', marginTop: '14px',
@@ -200,7 +192,6 @@ export default function SymptomPage() {
           </div>
         )}
 
-        {/* Sent confirmation */}
         {sent && (
           <div className="fade-in" style={{
             background: 'rgba(37,211,102,0.08)', border: '1px solid rgba(37,211,102,0.25)',
@@ -215,7 +206,6 @@ export default function SymptomPage() {
           </div>
         )}
 
-        {/* WhatsApp modal */}
         {modal && (
           <div
             style={{ position: 'absolute', inset: 0, background: 'rgba(8,6,26,0.7)', display: 'flex', alignItems: 'flex-end', zIndex: 50, backdropFilter: 'blur(6px)' }}
