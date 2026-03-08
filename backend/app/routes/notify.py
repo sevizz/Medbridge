@@ -35,7 +35,6 @@ async def notify_doctor(req: NotifyRequest, user_id: str = Depends(get_user_id))
         to=f"whatsapp:{req.doctor_whatsapp}"
     )
     supabase.table("symptom_logs").update(
-        {"doctor_notified": True, "notified_at": "now()"}
-    ).eq("user_id", user_id).order("created_at", desc=True).limit(1).execute()
-
+    {"doctor_notified": True, "notified_at": "now()"}
+    ).eq("user_id", user_id).execute()
     return {"status": "sent"}

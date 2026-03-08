@@ -14,7 +14,6 @@ const SECTIONS = [
 const LANGS = [['en', 'English'], ['ta', 'தமிழ்'], ['hi', 'हिंदी']]
 
 async function extractTextFromPdf(file: File): Promise<string> {
-  // Dynamically import pdfjs-dist to keep bundle lean
   const pdfjsLib = await import('pdfjs-dist')
   pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`
 

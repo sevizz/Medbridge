@@ -94,6 +94,9 @@ export default function HomePage() {
               <div style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1.65rem', fontWeight: 800, color: 'rgba(255,255,255,0.95)', marginBottom: '2px', letterSpacing: '-0.03em' }}>
                 {profile?.fname || '—'}
               </div>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.62rem', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.38)', marginBottom: '4px' }}>
+                {profile?.diagnosis || '—'}
+              </div>
             </div>
 
             <div
