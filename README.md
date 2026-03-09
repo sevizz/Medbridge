@@ -12,7 +12,7 @@ Drug Lookup: Search any drug for usage, dosage, side effects, and interactions �
 Reminders: Configurable medication and appointment reminders on the homepage, accessible to patients and caregivers 
 Multilingual: Full support for English, Hindi, and Tamil 
 
-TECH STACK - 
+## TECH STACK - 
 
 
  Frontend
@@ -40,7 +40,7 @@ TECH STACK -
  Deep Translator (Google Translate) for high-quality regional language 
 
 
- PREREQUISITES -
+ ## PREREQUISITES -
 
   Node.js    24.11.1  
   Python     It will not run on 3.14 so it's recommended to run on Python version 3.13.5 or below
@@ -50,14 +50,14 @@ TECH STACK -
 
 
 
- CLONING -
+ ## CLONING -
 
  
  git clone https://github.com/sevizz/Medbridge
  
 
 
- ENVIRONMENT VARIABLES -
+## ENVIRONMENT VARIABLES -
 
  in the frontend folder create file .env.local
        
@@ -67,7 +67,7 @@ TECH STACK -
 
        
 
-in the backend folder create file .env
+ in the backend folder create file .env
 
       SUPABASE_URL=your_supabase_url
       SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
@@ -77,19 +77,19 @@ in the backend folder create file .env
       TWILIO_WHATSAPP_FROM=whatsapp:+14155238886
 
   
-RUNNING THE BACKEND -
+## RUNNING THE BACKEND -
 
     cd backend
     pip install -r requirements.txt
     uvicorn main:app --reload --port 8000
 
-RUNNING THE FRONTEND -
+## RUNNING THE FRONTEND -
 
     cd frontend
     npm install
     npm run dev
 
-PROJECT STRUCTURE -
+## PROJECT STRUCTURE -
 
     medbridge/
     ├── frontend/               # Next.js 16 + React 19
@@ -110,7 +110,7 @@ PROJECT STRUCTURE -
     └── README.md
 
 
-KNOWN LIMITATIONS -
+## KNOWN LIMITATIONS -
 
     These are active work-in-progress items, not hidden issues:
 
@@ -121,7 +121,7 @@ KNOWN LIMITATIONS -
     3. Offline Support — All features require an internet connection. Background push notifications are not yet implemented, so reminders require the app to be open. PWA + Firebase Cloud Messaging support is planned.
 
 
-ROADMAP -
+## ROADMAP -
 
 -   Structured LLM output with retry and schema validation
 -  Google Vision OCR for scanned discharge summaries
