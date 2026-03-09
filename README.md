@@ -1,9 +1,9 @@
-### MEDBRIDGE
+## MEDBRIDGE
 MedBridge bridges the critical gap between hospital discharge and home recovery. It transforms complex medical discharge documents into simple, actionable guidance and keeps the patient's doctor in the loop when something goes wrong.
 
 Every year, millions of patients are discharged from Indian hospitals with documents written for doctors, not patients. They go home confused about their diagnosis, unsure how to take their medications, and with no accessible support system when something feels wrong. This leads to missed doses, ignored warning signs, and preventable readmissions — disproportionately affecting elderly, low-literacy, and non-English-speaking patients.
 
-## FEATURES EXPLAINED -
+### FEATURES EXPLAINED -
 
 Discharge Explainer: Upload a discharge PDF or paste text → get a plain-language summary of diagnosis, home care steps, and warning signs in seconds 
 Symptom Checker: Describe a symptom → AI classifies it as **Safe / Monitor / Urgent** based on the patient's age, diagnosis, and current medications. One tap sends a structured WhatsApp alert to the doctor 
@@ -12,15 +12,15 @@ Drug Lookup: Search any drug for usage, dosage, side effects, and interactions �
 Reminders: Configurable medication and appointment reminders on the homepage, accessible to patients and caregivers 
 Multilingual: Full support for English, Hindi, and Tamil 
 
-## TECH STACK - 
+### TECH STACK - 
 
 
- Frontend
+ #### Frontend
  Next.js 16 with React 19 — mobile-first UI running in the browser
  pdfjs-dist — client-side PDF text extraction (no file uploads to server)
  Supabase Auth — JWT-based login and session management
 
- Backend
+ #### Backend
  Python + FastAPI — lightweight async REST API
  Every route is JWT-protected via Supabase
 
@@ -40,7 +40,7 @@ Multilingual: Full support for English, Hindi, and Tamil
  Deep Translator (Google Translate) for high-quality regional language 
 
 
- ## PREREQUISITES -
+### PREREQUISITES -
 
   Node.js    24.11.1  
   Python     It will not run on 3.14 so it's recommended to run on Python version 3.13.5 or below
@@ -50,14 +50,14 @@ Multilingual: Full support for English, Hindi, and Tamil
 
 
 
- ## CLONING -
+### CLONING -
 
  
  git clone https://github.com/sevizz/Medbridge
  
 
 
-## ENVIRONMENT VARIABLES -
+ ### ENVIRONMENT VARIABLES -
 
  in the frontend folder create file .env.local
        
@@ -67,7 +67,7 @@ Multilingual: Full support for English, Hindi, and Tamil
 
        
 
- in the backend folder create file .env
+in the backend folder create file .env
 
       SUPABASE_URL=your_supabase_url
       SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
@@ -77,19 +77,19 @@ Multilingual: Full support for English, Hindi, and Tamil
       TWILIO_WHATSAPP_FROM=whatsapp:+14155238886
 
   
-## RUNNING THE BACKEND -
+#### RUNNING THE BACKEND -
 
     cd backend
     pip install -r requirements.txt
     uvicorn main:app --reload --port 8000
 
-## RUNNING THE FRONTEND -
+#### RUNNING THE FRONTEND -
 
     cd frontend
     npm install
     npm run dev
 
-## PROJECT STRUCTURE -
+### PROJECT STRUCTURE -
 
     medbridge/
     ├── frontend/               # Next.js 16 + React 19
@@ -110,7 +110,7 @@ Multilingual: Full support for English, Hindi, and Tamil
     └── README.md
 
 
-## KNOWN LIMITATIONS -
+### KNOWN LIMITATIONS -
 
     These are active work-in-progress items, not hidden issues:
 
@@ -121,7 +121,7 @@ Multilingual: Full support for English, Hindi, and Tamil
     3. Offline Support — All features require an internet connection. Background push notifications are not yet implemented, so reminders require the app to be open. PWA + Firebase Cloud Messaging support is planned.
 
 
-## ROADMAP -
+### ROADMAP -
 
 -   Structured LLM output with retry and schema validation
 -  Google Vision OCR for scanned discharge summaries
