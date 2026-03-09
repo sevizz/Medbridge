@@ -1,9 +1,9 @@
-MEDBRIDGE
+### MEDBRIDGE
 MedBridge bridges the critical gap between hospital discharge and home recovery. It transforms complex medical discharge documents into simple, actionable guidance and keeps the patient's doctor in the loop when something goes wrong.
 
 Every year, millions of patients are discharged from Indian hospitals with documents written for doctors, not patients. They go home confused about their diagnosis, unsure how to take their medications, and with no accessible support system when something feels wrong. This leads to missed doses, ignored warning signs, and preventable readmissions — disproportionately affecting elderly, low-literacy, and non-English-speaking patients.
 
-FEATURES EXPLAINED -
+## FEATURES EXPLAINED -
 
 Discharge Explainer: Upload a discharge PDF or paste text → get a plain-language summary of diagnosis, home care steps, and warning signs in seconds 
 Symptom Checker: Describe a symptom → AI classifies it as **Safe / Monitor / Urgent** based on the patient's age, diagnosis, and current medications. One tap sends a structured WhatsApp alert to the doctor 
