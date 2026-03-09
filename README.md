@@ -3,7 +3,7 @@ MedBridge bridges the critical gap between hospital discharge and home recovery.
 
 Every year, millions of patients are discharged from Indian hospitals with documents written for doctors, not patients. They go home confused about their diagnosis, unsure how to take their medications, and with no accessible support system when something feels wrong. This leads to missed doses, ignored warning signs, and preventable readmissions — disproportionately affecting elderly, low-literacy, and non-English-speaking patients.
 
-## FEATURES EXPLAINED -
+### FEATURES EXPLAINED -
 
 Discharge Explainer: Upload a discharge PDF or paste text → get a plain-language summary of diagnosis, home care steps, and warning signs in seconds 
 Symptom Checker: Describe a symptom → AI classifies it as **Safe / Monitor / Urgent** based on the patient's age, diagnosis, and current medications. One tap sends a structured WhatsApp alert to the doctor 
@@ -12,7 +12,7 @@ Drug Lookup: Search any drug for usage, dosage, side effects, and interactions �
 Reminders: Configurable medication and appointment reminders on the homepage, accessible to patients and caregivers 
 Multilingual: Full support for English, Hindi, and Tamil 
 
-## TECH STACK - 
+### TECH STACK - 
 
 
  #### Frontend
@@ -40,10 +40,11 @@ Multilingual: Full support for English, Hindi, and Tamil
  Deep Translator (Google Translate) for high-quality regional language 
 
 
-## PREREQUISITES -
+### PREREQUISITES -
 
   Node.js    24.11.1  
-  Python     It will not run on 3.14 so it's recommended to run on Python version 3.13.5 or below
+  Python     
+  It will not run on 3.14 so it's recommended to run on Python version 3.13.5 or below
   Supabase   https://supabase.com
   Groq API   https://console.groq.com
   Twilio     https://twilio.com
@@ -89,7 +90,7 @@ in the backend folder create file .env
     npm install
     npm run dev
 
-## PROJECT STRUCTURE -
+### PROJECT STRUCTURE -
 
     medbridge/
     ├── frontend/               # Next.js 16 + React 19
@@ -110,18 +111,18 @@ in the backend folder create file .env
     └── README.md
 
 
-## KNOWN LIMITATIONS -
+### KNOWN LIMITATIONS -
 
-   These are active work-in-progress items, not hidden issues:
+    These are active work-in-progress items, not hidden issues:
 
-   1. LLM Output Reliability — The system relies on the LLM returning valid JSON. Malformed output currently causes a crash. A retry mechanism with schema validation is planned.
+    1. LLM Output Reliability — The system relies on the LLM returning valid JSON. Malformed output currently causes a crash. A retry mechanism with schema validation is planned.
 
-   2. Scanned PDF Support — `pdfjs-dist` works well on digital PDFs but fails on scanned documents, which are extremely common in Indian hospitals. Google Vision API OCR integration is on the roadmap.
+    2. Scanned PDF Support — `pdfjs-dist` works well on digital PDFs but fails on scanned documents, which are extremely common in Indian hospitals. Google Vision API OCR integration is on the roadmap.
 
-   3. Offline Support — All features require an internet connection. Background push notifications are not yet implemented, so reminders require the app to be open. PWA + Firebase Cloud Messaging support is planned.
+    3. Offline Support — All features require an internet connection. Background push notifications are not yet implemented, so reminders require the app to be open. PWA + Firebase Cloud Messaging support is planned.
 
 
-## ROADMAP -
+### ROADMAP -
 
 -   Structured LLM output with retry and schema validation
 -  Google Vision OCR for scanned discharge summaries
